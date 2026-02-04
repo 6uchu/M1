@@ -1,8 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
+    [SerializeField] TMP_Text scoreText;
+    long score = 0;
     void Start()
     {
         if(Instance != null && Instance != this)
@@ -11,11 +14,13 @@ public class ScoreManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        scoreText.text = score.ToString("N0");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddScore(int add)
     {
-        
+        score += add;
+        scoreText.text = score.ToString("N0");
     }
 }

@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public static SpawnManager instance;
+    public static SpawnManager Instance;
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] int quantity;
 
     private void Awake()
     {
-        if (instance == null && instance != this)
-            instance = this;
-        else
-            Destroy(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(Instance);
+            return;
+        }
+        Instance = this;
     }
     void Start()
     {
@@ -36,7 +38,7 @@ public class SpawnManager : MonoBehaviour
 
             int randomIndex = Random.Range(1, spawnPoints.Length);
             Instantiate(enemyPrefab, spawnPoints[randomIndex].position, Quaternion.identity);
-            quantity--;
+            //quantity--;
         }
     }
 }

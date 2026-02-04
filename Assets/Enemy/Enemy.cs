@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] GameObject Item;
     bool isTouchingPlayer = false;
     bool isTouchingBarricade = false;
+    bool isKnockback = false;
     Player player;
     Barricade barricade;
 
@@ -21,7 +22,10 @@ public class Enemy : MonoBehaviour, IDamageable
     Rigidbody2D rb;
     public Vector2 Dir;
 
+    [SerializeField] float knockbackPower = 1f;
+
     Canvas cv;
+    IDamageable currentTarget;
     [SerializeField] int hitOrder = 10;
     [SerializeField] float hitOrderTime = 1f;
     int defaultOrder;
@@ -45,33 +49,44 @@ public class Enemy : MonoBehaviour, IDamageable
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (isTouchingPlayer || isTouchingBarricade) return;
-
-        Dir = (player.transform.position - transform.position).normalized;
-        rb.MovePosition(rb.position + Dir * speed * Time.fixedDeltaTime);
+        Vector2 move;
+        if (isTouchingPlayer || isKnockback)
+        {
+            move = Vector2.zero;
+        }
+        else
+        {
+            Dir = (player.transform.position - transform.position).normalized;
+            move = Dir * speed;
+        }
+        rb.linearVelocity = new Vector2(move.x, move.y);
     }
 
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-            isTouchingPlayer = true;
+        if (currentTarget != null) return;
 
-        if (collision.gameObject.CompareTag("Barricade")){
-            barricade = collision.gameObject.GetComponent<Barricade>();
-            isTouchingBarricade = true;
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            currentTarget = collision.gameObject.GetComponent<Player>();
+            isTouchingPlayer = true;
         }
+        else if (collision.gameObject.CompareTag("Barricade"))
+        {
+            currentTarget = collision.gameObject.GetComponent<Barricade>();
+        }
+        else
+            return;
+        Debug.Log("ATk" + collision);
         StartCoroutine(AttackLoop());
     }
-
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
             isTouchingPlayer = false;
 
-        if (collision.gameObject.CompareTag("Barricade"))
-            isTouchingBarricade = false;
+        currentTarget = null;
     }
 
 
@@ -84,28 +99,40 @@ public class Enemy : MonoBehaviour, IDamageable
         if (hpBar != null)
             hpBar.fillAmount = (float)hp / maxHp;
 
-        StopCoroutine(nameof(HitOrder));
-        StartCoroutine(HitOrder());
+        //StopCoroutine(nameof(HitOrder));
+        //StartCoroutine(HitOrder());
+        HitOrder();
+        Knockback(-Dir);
 
         if (hp <= 0)
             Die();
     }
 
-    IEnumerator HitOrder()
+    public void Knockback(Vector2 dir)
+    {
+        isKnockback = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(dir.normalized * knockbackPower, ForceMode2D.Impulse);
+        Invoke(nameof(EndKnockback), 0.15f);
+    }
+
+    void EndKnockback()
+    {
+        isKnockback = false;
+    }
+
+    void HitOrder()
     {
         cv.sortingOrder = hitOrder;
-        yield return new WaitForSeconds(hitOrderTime);
-        cv.sortingOrder = defaultOrder;
+        //yield return new WaitForSeconds(hitOrderTime);
+        //cv.sortingOrder = defaultOrder;
     }
 
     IEnumerator AttackLoop()
     {
-        while (isTouchingPlayer || isTouchingBarricade)
+        while (currentTarget != null)
         {
-            if (isTouchingPlayer)
-                player.TakeDamage(atk);
-            if (isTouchingBarricade)
-                barricade.TakeDamage(atk);
+            currentTarget.TakeDamage(atk);
 
             yield return new WaitForSeconds(cooldown);
         }
@@ -117,6 +144,9 @@ public class Enemy : MonoBehaviour, IDamageable
         if (random <= 1)
             Instantiate(Item, transform.position, Quaternion.identity);
         Instantiate(DeadBody, transform.position, Quaternion.identity);
+
+        ScoreManager.Instance.AddScore(100);
+
         Destroy(gameObject);
     }
 }

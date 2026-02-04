@@ -56,6 +56,7 @@ MonoBehaviour:
   maxHp: 100
   speed: 3
   Dir: {x: 0, y: 0}
+  knockbackPower: 1
   hitOrder: 10
   hitOrderTime: 1
   cooldown: 2

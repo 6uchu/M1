@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     [SerializeField] float maxHp;
     [SerializeField] float hp;
@@ -13,10 +13,10 @@ public class Player : MonoBehaviour
     public Vector2 LookDir;
 
     // 이동 제한 범위
-    [SerializeField] float minX = -4.5f;
     [SerializeField] float maxX = 4.5f;
-    [SerializeField] float minY = -4f;
+    [SerializeField] float minX;
     [SerializeField] float maxY = 4.5f;
+    [SerializeField] float minY;
 
     [SerializeField] ItemCounterUI itemCounterUI;
     void Awake()
@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        minX = -maxX;
+        minY = -maxY;
     }
 
     void Update()

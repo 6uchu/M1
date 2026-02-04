@@ -20,7 +20,9 @@ public class Gun : MonoBehaviour
 
     public void Fire()
     {
-        if (fire == null) return;
+        if (fire == null || WeaponManager.Instance.Ammo() <= 0) return;
+
+        WeaponManager.Instance.UseAmmo();
         fire.Fire(data);
     }
 }

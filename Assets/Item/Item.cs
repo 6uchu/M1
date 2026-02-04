@@ -6,7 +6,7 @@ public class Item : MonoBehaviour
     float random;
     void Start()
     {
-        Destroy(gameObject, 5f);
+        //Destroy(gameObject, 5f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -24,10 +24,18 @@ public class Item : MonoBehaviour
 
     void WhichOne(float ran)
     {
-        if(ran < 0.5)
+        if(ran <= 0.5)
         {
             Debug.Log("GetWall");
             player.GetWall();
+        }
+        else if(ran <= 0.7)
+        {
+            WeaponManager.Instance.GetShot();
+        }
+        else if(ran <= 1)
+        {
+            WeaponManager.Instance.GetNade();
         }
     }
 }
