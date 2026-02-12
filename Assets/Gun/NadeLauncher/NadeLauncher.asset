@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af026df3addd212499397dd606972617, type: 3}
   m_Name: NadeLauncher
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  weaponName: Pistol
-  weaponPrefab: {fileID: 7729874216322669373, guid: 2c77c19b86ee5c948a234aa51f957184, type: 3}
-  damage: 30
+  weaponName: NadeLauncher
+  weaponPrefab: {fileID: 7729874216322669373, guid: 228cd6a5b88b996438eea489b224d156, type: 3}
+  damage: 100

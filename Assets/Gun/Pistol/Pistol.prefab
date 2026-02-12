@@ -114,7 +114,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4854829337826818713, guid: a24cfe060e8c9814fa94184a5fb69093, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -161,14 +161,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SingleFire
   firePos: {fileID: 7543517061538413992}
-  ShootingSystem: {fileID: 0}
-  ImpactParticleSystem: {fileID: 0}
   hitMask:
     serializedVersion: 2
     m_Bits: 136
-  range: 10
+  ShootingSystem: {fileID: 0}
+  ImpactParticleSystem: {fileID: 0}
   tracerPrefab: {fileID: 1623824751558462546, guid: 5f5ab95a3af706c43bd7d0631b985e01, type: 3}
+  range: 20
   tracerSpeed: 80
+  knockbackPower: 3
 --- !u!114 &-1616791500184722967
 MonoBehaviour:
   m_ObjectHideFlags: 0

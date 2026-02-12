@@ -8,8 +8,6 @@ public class Barricade : MonoBehaviour, IDamageable
     [SerializeField] Image hpBar;
     [SerializeField] int maxHp = 100;
     [SerializeField] int hitOrder = 10;
-    [SerializeField] float hitOrderTime = 1f;
-    int defaultOrder = 1;
     Canvas cv;
     int hp;
 

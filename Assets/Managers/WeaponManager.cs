@@ -18,7 +18,7 @@ public class WeaponManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(gameObject);
             return;
         }
         Instance = this;
@@ -28,6 +28,11 @@ public class WeaponManager : MonoBehaviour
         ammo[0] = 100;
         ammo[1] = 0;
         ammo[2] = 0;
+    }
+
+    private void Start()
+    {
+        //Equip(0);
     }
     public void Equip(int index)
     {
@@ -49,18 +54,22 @@ public class WeaponManager : MonoBehaviour
     public void UseAmmo()
     {
         if (weaponIndex == 0) return;
-        ammo[weaponIndex]--;
+        ammo[weaponIndex] = Mathf.Max(ammo[weaponIndex] - 1, 0);
         AdjAmmoUI();
     }
 
     public void GetShot()
     {
         ammo[1] += 5;
+
+        AdjAmmoUI();
     }
 
     public void GetNade()
     {
         ammo[2] += 5;
+
+        AdjAmmoUI();
     }
 
     void AdjAmmoUI()

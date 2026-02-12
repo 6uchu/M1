@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class Player : MonoBehaviour, IDamageable
 {
+    public static event Action OnPlayerDead;
+
     [SerializeField] float maxHp;
     [SerializeField] float hp;
     [SerializeField] Image hpBar;
@@ -13,9 +16,9 @@ public class Player : MonoBehaviour, IDamageable
     public Vector2 LookDir;
 
     // 이동 제한 범위
-    [SerializeField] float maxX = 4.5f;
+    [SerializeField] float maxX = 17f;
     [SerializeField] float minX;
-    [SerializeField] float maxY = 4.5f;
+    [SerializeField] float maxY = 17f;
     [SerializeField] float minY;
 
     [SerializeField] ItemCounterUI itemCounterUI;
@@ -47,13 +50,7 @@ public class Player : MonoBehaviour, IDamageable
 
     void FixedUpdate()
     {
-        Vector2 newPos = rb.position + input * speed * Time.fixedDeltaTime;
-
-        // Clamp로 제한
-        newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
-        newPos.y = Mathf.Clamp(newPos.y, minY, maxY);
-
-        rb.MovePosition(newPos);
+        rb.linearVelocity = input * speed;
     }
 
     public void TakeDamage(int damage)
@@ -64,13 +61,19 @@ public class Player : MonoBehaviour, IDamageable
         if (hpBar != null)
             hpBar.fillAmount = hp / maxHp;
 
-        //if (hp <= 0)
-        //    Die();
+        if (hp <= 0)
+            Die();
+    }
+
+    void Die()
+    {
+        OnPlayerDead?.Invoke();
+
+        gameObject.SetActive(false);
     }
 
     public void GetWall()
     {
-        Debug.Log(ItemManager.Instance.WallCnt);
         ItemManager.Instance.AddWall(5);
         itemCounterUI.Redate();
     }

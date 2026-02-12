@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class Body : MonoBehaviour
 {
-    Animator anim;
+    Animator ani;
     Vector2 input;
 
     void Awake()
     {
-        anim = GetComponent<Animator>();
+        ani = GetComponent<Animator>();
     }
 
     void Update()
@@ -16,7 +16,7 @@ public class Body : MonoBehaviour
         input.y = Input.GetAxisRaw("Vertical");
         input = input.normalized;
 
-        anim.SetBool("Run", input.sqrMagnitude > 0);
+        ani.SetBool("Run", input.sqrMagnitude > 0);
 
         if (input.x > 0)
             transform.localScale = new Vector3(1, 1, 1);

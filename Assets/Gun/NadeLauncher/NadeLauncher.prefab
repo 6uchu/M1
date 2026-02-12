@@ -114,7 +114,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1834110627827604622, guid: 393a6eeef4f74be43853b3b20cab9dae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -175,10 +175,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NadeThrow
   firePos: {fileID: 7543517061538413992}
   ShootingSystem: {fileID: 0}
-  ImpactParticleSystem: {fileID: 0}
-  hitMask:
-    serializedVersion: 2
-    m_Bits: 136
-  range: 10
-  tracerPrefab: {fileID: 0}
-  tracerSpeed: 80
+  nadePrefab: {fileID: 7901657477496697266, guid: 337dc3eca80222842b1bc64fc0c7ace6, type: 3}

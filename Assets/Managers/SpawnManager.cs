@@ -6,39 +6,46 @@ public class SpawnManager : MonoBehaviour
     public static SpawnManager Instance;
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] Transform[] spawnPoints;
-    [SerializeField] int quantity;
+    void OnEnable()
+    {
+        Player.OnPlayerDead += Play;
+    }
+
+    void OnDisable()
+    {
+        Player.OnPlayerDead -= Play;
+    }
+
+    public void Play()
+    {
+        gameObject.SetActive(false);
+    }
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(gameObject);
             return;
         }
         Instance = this;
     }
     void Start()
     {
-        quantity = 5;
-
-        spawnPoints = GetComponentsInChildren<Transform>();
         StartCoroutine(SpawnEnemy());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     IEnumerator SpawnEnemy()
     {
-        while (quantity > 0)
+        while (true)
         {
-            yield return new WaitForSeconds(2f);
+            long score = ScoreManager.Instance.GetScore();
+            float cooltime = 3f / (Mathf.Log(score + 10f) + 1f);
+            cooltime = Mathf.Max(0.2f, cooltime);
+            yield return new WaitForSeconds(cooltime);
 
-            int randomIndex = Random.Range(1, spawnPoints.Length);
+            int randomIndex = Random.Range(0, spawnPoints.Length);
             Instantiate(enemyPrefab, spawnPoints[randomIndex].position, Quaternion.identity);
-            //quantity--;
         }
     }
 }

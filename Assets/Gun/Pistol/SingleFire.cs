@@ -3,14 +3,19 @@ using UnityEngine;
 
 public class SingleFire : MonoBehaviour, IFireStrategy
 {
-    [SerializeField] Transform firePos;                  // 총구 위치
-    [SerializeField] ParticleSystem ShootingSystem;      // 발사 이펙트
-    [SerializeField] ParticleSystem ImpactParticleSystem;// 맞았을 때 이펙트
-    [SerializeField] LayerMask hitMask;                 // 충돌할 레이어
-    [SerializeField] float range = 10f;                 // 사거리
+    [SerializeField] Transform firePos;                 
+    [SerializeField] LayerMask hitMask;                
+    [SerializeField] ParticleSystem ShootingSystem;     //발사 이팩트
+    [SerializeField] ParticleSystem ImpactParticleSystem;//타격 이팩트
+
+    [Header("총 로직")]
     [SerializeField] GameObject tracerPrefab;
+    [SerializeField] float range = 10f;               
     [SerializeField] float tracerSpeed = 80f;
 
+    [Header("넉백")]
+    [SerializeField] float knockbackPower;
+    Vector2 knockDir;
     //Animator anim;
     Vector2 lastDir = Vector2.right;
 
@@ -39,9 +44,15 @@ public class SingleFire : MonoBehaviour, IFireStrategy
         if (hit)
         {
             //ImpactParticleSystem?.Play();
-            if (hit.collider.TryGetComponent<IDamageable>(out var d))
+            if (hit.collider.GetComponentInParent<IDamageable>() is IDamageable d)
             {
                 d.TakeDamage(data.damage);
+
+                if (hit.collider.GetComponentInParent<IKnockbackable>() is IKnockbackable k)
+                {
+                    knockDir = (hit.transform.position - firePos.position).normalized;
+                    k.Knockback(knockDir, knockbackPower);
+                }
             }
         }
     }

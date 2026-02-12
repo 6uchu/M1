@@ -5,16 +5,23 @@ public class ShotgunFire : MonoBehaviour, IFireStrategy
 {
     [SerializeField] Transform firePos;
     [SerializeField] LayerMask hitMask;
-    [SerializeField] float range = 10f;
 
-    [Header("Shotgun")]
+    [Header("총 로직")]
+    [SerializeField] GameObject tracerPrefab;
+    [SerializeField] float tracerSpeed = 80f;
+    [SerializeField] float range = 10f;
     [SerializeField] int pelletCount = 8;
     [SerializeField] float spreadAngle = 15f;
 
-    [SerializeField] GameObject tracerPrefab;
-    [SerializeField] float tracerSpeed = 80f;
+    [Header("넉백")]
+    [SerializeField] float knockbackPower;
+    Vector2 knockDir;
 
     Vector2 lastDir = Vector2.right;
+
+    private void Start()
+    {
+    }
 
     void Update()
     {
@@ -37,9 +44,19 @@ public class ShotgunFire : MonoBehaviour, IFireStrategy
 
             if (!hit) continue;
 
-            if (hit.collider.TryGetComponent<IDamageable>(out var d))
+            if (hit.collider.GetComponentInParent<IDamageable>() is IDamageable d)
             {
                 d.TakeDamage(data.damage);
+
+                if (hit.collider.GetComponentInParent<IKnockbackable>() is IKnockbackable k)
+                {
+                    Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
+                    enemy.ChangeState(Enemy.EnemyState.Hit);
+                    Animator ani = enemy.GetComponentInChildren<Animator>();
+                    ani.SetTrigger("Hit");
+                    //knockDir = (hit.transform.position - firePos.position).normalized;
+                    //k.Knockback(knockDir, knockbackPower);
+                }
             }
         }
     }

@@ -114,7 +114,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -827366607, guid: 393a6eeef4f74be43853b3b20cab9dae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -177,8 +177,9 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 136
+  tracerPrefab: {fileID: 1623824751558462546, guid: 5f5ab95a3af706c43bd7d0631b985e01, type: 3}
+  tracerSpeed: 80
   range: 5
   pelletCount: 5
   spreadAngle: 15
-  tracerPrefab: {fileID: 1623824751558462546, guid: 5f5ab95a3af706c43bd7d0631b985e01, type: 3}
-  tracerSpeed: 80
+  knockbackPower: 5
